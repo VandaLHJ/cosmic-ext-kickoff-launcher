@@ -94,7 +94,15 @@ fn spawn_application(app: Arc<ApplicationEntry>, token: Option<String>) -> Task<
             environment.push(("XDG_ACTIVATION_TOKEN", token.clone()));
             environment.push(("DESKTOP_STARTUP_ID", token.clone()));
         }
-        if app.working_dir.is_some() {
+        if in_flatpak() {
+            if let Some(command) = flatpak_host_command(&app, &exec, &environment) {
+                if cosmic::process::spawn(command).await.is_none() {
+                    tracing::warn!("Failed to spawn {} on the host", app.id);
+                }
+            } else {
+                tracing::warn!("Invalid Exec field in {}", app.id);
+            }
+        } else if app.working_dir.is_some() {
             if let Some(mut command) = command_in_working_dir(&app, &exec) {
                 command.envs(environment);
                 if cosmic::process::spawn(command).await.is_none() {
@@ -132,26 +140,61 @@ async fn activate_dbus_application(app_id: &str, token: Option<&str>) -> zbus::R
     proxy.call::<_, _, ()>("Activate", &platform_data).await
 }
 
+fn in_flatpak() -> bool {
+    std::env::var_os("FLATPAK_ID").is_some()
+}
+
+/// Run a host program. Inside Flatpak this goes through `flatpak-spawn --host`,
+/// which is what makes desktop `Exec=` lines and `cosmic-osd` work in the sandbox.
+pub(crate) fn host_command(program: impl AsRef<std::ffi::OsStr>) -> Command {
+    if in_flatpak() {
+        let mut command = Command::new("flatpak-spawn");
+        command.arg("--host");
+        command.arg(program);
+        command
+    } else {
+        Command::new(program)
+    }
+}
+
+/// Launch a desktop `Exec=` line on the host, outside the Flatpak sandbox.
+fn flatpak_host_command(
+    app: &ApplicationEntry,
+    exec: &str,
+    environment: &[(&str, String)],
+) -> Option<Command> {
+    let argv = desktop_argv(app, exec)?;
+    let mut command = Command::new("flatpak-spawn");
+    command.arg("--host");
+    if let Some(directory) = &app.working_dir {
+        command.arg(format!("--directory={}", directory.display()));
+    }
+    for (key, value) in environment {
+        command.arg(format!("--env={key}={value}"));
+    }
+    command.args(argv);
+    Some(command)
+}
+
 /// libcosmic's desktop helper intentionally has no working-directory argument.
 fn command_in_working_dir(app: &ApplicationEntry, exec: &str) -> Option<Command> {
-    let Some(exec) = expand_exec_fields(exec, &app.name, app.icon.as_deref(), &app.path) else {
-        tracing::warn!("Invalid Exec field in {}", app.id);
-        return None;
-    };
-    let Some(mut argv) = shlex::split(&exec).filter(|argv| !argv.is_empty()) else {
-        tracing::warn!("Could not parse Exec field in {}", app.id);
-        return None;
-    };
-    if app.is_terminal {
-        argv.insert(0, "-e".to_string());
-        argv.insert(0, "cosmic-term".to_string());
-    }
+    let argv = desktop_argv(app, exec)?;
     let mut command = Command::new(&argv[0]);
     command.args(&argv[1..]);
     if let Some(directory) = &app.working_dir {
         command.current_dir(directory);
     }
     Some(command)
+}
+
+fn desktop_argv(app: &ApplicationEntry, exec: &str) -> Option<Vec<String>> {
+    let exec = expand_exec_fields(exec, &app.name, app.icon.as_deref(), &app.path)?;
+    let mut argv = shlex::split(&exec).filter(|argv| !argv.is_empty())?;
+    if app.is_terminal {
+        argv.insert(0, "-e".to_string());
+        argv.insert(0, "cosmic-term".to_string());
+    }
+    Some(argv)
 }
 
 fn expand_exec_fields(

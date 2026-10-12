@@ -119,7 +119,7 @@ pub(crate) enum Message {
     PinnedBarUnhovered(String),
     SetDefaultCategory(String),
     ToggleSidebarDefault,
-    Surface(cosmic::surface::Action),
+    Surface(cosmic::surface::Action<Message>),
     PowerAction(power::PowerAction),
     PowerActionDone,
     ActivationToken(TokenUpdate),
@@ -169,9 +169,7 @@ fn reload_apps() -> Task<Message> {
 fn message_update(applet: &mut Applet, message: Message) -> Task<Message> {
     match message {
         Message::Surface(action) => {
-            return cosmic::task::message(cosmic::Action::Cosmic(cosmic::app::Action::Surface(
-                action,
-            )));
+            return cosmic::task::message(cosmic::Action::Surface(action));
         }
         Message::TogglePopup(bounds) => {
             if let Some(popup) = applet.popup.take() {
@@ -475,7 +473,7 @@ fn message_update(applet: &mut Applet, message: Message) -> Task<Message> {
                 COSMIC_SETTINGS_APP_ID => "cosmic-settings",
                 _ => return Task::none(),
             };
-            launch::spawn_command(std::process::Command::new(program))
+            launch::spawn_command(launch::host_command(program))
         }
         Message::ToggleSidebarDefault => {
             applet.config.sidebar_collapsed = !applet.config.sidebar_collapsed;
@@ -647,7 +645,13 @@ impl Application for Applet {
                     (None, AppletConfig::default())
                 }
             };
+        let removed_system76_icon = config.panel_icon == "cosmic-kickoff-system76-logo";
         config.sanitize();
+        if removed_system76_icon {
+            if let Some(context) = &config_context {
+                let _ = config.write_entry(context);
+            }
+        }
 
         let pinned_apps = dock::load_pinned_apps_with_defaults();
         let pinned_ids = pinned_apps.iter().cloned().collect();

@@ -1,0 +1,87 @@
+{
+  "id": "com.github.cosmic-kickoff-launcher",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "25.08",
+  "base": "com.system76.Cosmic.BaseApp",
+  "base-version": "stable",
+  "sdk": "org.freedesktop.Sdk",
+  "sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
+  "command": "/app/launch-applet.sh",
+  "finish-args": [
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--socket=system-bus",
+    "--socket=session-bus",
+    "--share=ipc",
+    "--filesystem=xdg-config/cosmic:rw",
+    "--talk-name=com.system76.CosmicSettingsDaemon",
+    "--system-talk-name=org.freedesktop.Accounts",
+    "--system-talk-name=org.freedesktop.login1",
+    "--device=dri",
+    "--talk-name=org.freedesktop.portal.Desktop",
+    "--talk-name=org.freedesktop.portal.Location",
+    "--talk-name=org.freedesktop.Flatpak",
+    "--talk-name=org.freedesktop.portal.*",
+    "--talk-name=org.freedesktop.ScreenSaver",
+    "--env=XDG_DATA_DIRS=/run/host/usr/share:/var/lib/flatpak/exports/share:/app/share:${HOME}/.local/share/flatpak/exports/share:${HOME}/.local/share",
+    "--filesystem=host:ro",
+    "--filesystem=host-os:ro",
+    "--filesystem=host-etc:ro",
+    "--filesystem=xdg-config/menus:ro",
+    "--filesystem=/var/lib/flatpak/exports/share/applications:ro",
+    "--filesystem=/var/lib/flatpak/app:ro",
+    "--filesystem=/var/lib/flatpak/exports/share/icons:ro",
+    "--filesystem=~/.local/share/flatpak/exports/share/applications:ro",
+    "--filesystem=~/.local/share/flatpak/app:ro",
+    "--filesystem=~/.local/share/flatpak/exports/share/icons:ro",
+    "--filesystem=~/.local/share/applications:ro",
+    "--filesystem=~/.local/share/icons:ro",
+    "--filesystem=/run/current-system/sw/bin:ro"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/rust-stable/bin",
+    "env": {
+      "CARGO_HOME": "/run/build/cosmic-ext-kickoff-launcher/cargo"
+    }
+  },
+  "modules": [
+    {
+      "name": "just",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm0755 just /app/bin/just"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "only-arches": ["x86_64"],
+          "url": "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-x86_64-unknown-linux-musl.tar.gz",
+          "sha256": "4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d"
+        },
+        {
+          "type": "archive",
+          "only-arches": ["aarch64"],
+          "url": "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-aarch64-unknown-linux-musl.tar.gz",
+          "sha256": "748237128c4c40cbdabc65e841d05ceba13cc23a91eaba395495894c1d9764df"
+        }
+      ]
+    },
+    {
+      "name": "cosmic-ext-kickoff-launcher",
+      "buildsystem": "simple",
+      "build-commands": [
+        "just build-release --verbose",
+        "just prefix=/app install",
+        "install -Dm0755 ./flatpak/launch-applet.sh /app/launch-applet.sh",
+        "sed -i 's|^Exec=.*|Exec=/app/launch-applet.sh|' /app/share/applications/com.github.cosmic-kickoff-launcher.desktop",
+        "rm -f /app/bin/just"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": ".."
+        }
+      ]
+    }
+  ]
+}

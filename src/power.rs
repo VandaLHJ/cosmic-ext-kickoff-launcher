@@ -80,7 +80,14 @@ async fn session() -> zbus::Result<login1::SessionProxy<'static>> {
 }
 
 async fn run_osd(action: &str) -> bool {
-    match tokio::process::Command::new("cosmic-osd").arg(action).status().await {
+    let mut command = if std::env::var_os("FLATPAK_ID").is_some() {
+        let mut command = tokio::process::Command::new("flatpak-spawn");
+        command.arg("--host").arg("cosmic-osd");
+        command
+    } else {
+        tokio::process::Command::new("cosmic-osd")
+    };
+    match command.arg(action).status().await {
         Ok(status) if status.success() => true,
         Ok(status) => {
             tracing::warn!("cosmic-osd {action} exited with {status}");

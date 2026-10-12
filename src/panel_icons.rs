@@ -11,7 +11,6 @@ pub(crate) const BENTO: &str = "cosmic-kickoff-bento";
 pub(crate) const HONEYCOMB: &str = "cosmic-kickoff-honeycomb";
 pub(crate) const COSMIC_APP_LIBRARY: &str = "com.system76.CosmicAppLibrary";
 pub(crate) const COSMIC_LOGO: &str = "cosmic-kickoff-cosmic-logo";
-pub(crate) const SYSTEM76_LOGO: &str = "cosmic-kickoff-system76-logo";
 pub(crate) const XFCE_APPLICATIONS_MENU: &str = "cosmic-kickoff-xfce-applications-menu";
 pub(crate) const HAIKU_DESKBAR: &str = "cosmic-kickoff-haiku-deskbar";
 pub(crate) const KDE2_KICKER: &str = "cosmic-kickoff-kde2-kicker";
@@ -57,10 +56,6 @@ pub(crate) fn handle(name: &str, symbolic: bool) -> Option<icon::Handle> {
         }
         (COSMIC_LOGO, false) => include_bytes!("../resources/icons/cosmic-logo.svg"),
         (COSMIC_LOGO, true) => include_bytes!("../resources/icons/cosmic-logo-mono.svg"),
-        (SYSTEM76_LOGO, false) => include_bytes!("../resources/icons/system76-logo.svg"),
-        (SYSTEM76_LOGO, true) => {
-            include_bytes!("../resources/icons/system76-logo-mono.svg")
-        }
         (XFCE_APPLICATIONS_MENU, false) => {
             include_bytes!("../resources/panel-icons/xfce-applications-menu.svg")
         }
@@ -74,17 +69,17 @@ pub(crate) fn handle(name: &str, symbolic: bool) -> Option<icon::Handle> {
             include_bytes!("../resources/panel-icons/haiku-deskbar-symbolic.svg")
         }
         (KDE2_KICKER, true) => {
-            include_bytes!("../resources/panel-icons/kde-breeze-symbolic.svg")
+            include_bytes!("../resources/panel-icons/kde-gear-symbolic.svg")
         }
         (KDE3_CRYSTAL, false) => {
             include_bytes!("../resources/panel-icons/kde3-crystal.svg")
         }
         (KDE3_CRYSTAL, true) => {
-            include_bytes!("../resources/panel-icons/kde-breeze-symbolic.svg")
+            include_bytes!("../resources/panel-icons/kde-tile-symbolic.svg")
         }
         (KDE_CLASSIC, false) => include_bytes!("../resources/icons/kde-classic.svg"),
         (KDE_CLASSIC, true) => {
-            include_bytes!("../resources/panel-icons/kde-breeze-symbolic.svg")
+            include_bytes!("../resources/panel-icons/kde-gear-symbolic.svg")
         }
         (KDE_BREEZE, false) => {
             include_bytes!("../resources/panel-icons/kde-breeze.svg")
@@ -93,10 +88,8 @@ pub(crate) fn handle(name: &str, symbolic: bool) -> Option<icon::Handle> {
             include_bytes!("../resources/panel-icons/kde-breeze-symbolic.svg")
         }
         (KDE_OXYGEN, false) => include_bytes!("../resources/icons/kde-oxygen.svg"),
-        // Oxygen predates symbolic icons; use KDE's current small-size
-        // symbolic launcher glyph rather than flattening its blue tile.
         (KDE_OXYGEN, true) => {
-            include_bytes!("../resources/panel-icons/kde-breeze-symbolic.svg")
+            include_bytes!("../resources/panel-icons/kde-tile-symbolic.svg")
         }
         (DEBIAN, _) => include_bytes!("../resources/panel-icons/debian.svg"),
         _ => return None,

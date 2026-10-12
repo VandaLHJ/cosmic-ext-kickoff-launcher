@@ -7,8 +7,9 @@
   <summary>A KDE-style application menu for the COSMIC™ desktop</summary>
   <description>
     <p>
-      Browse, search, favourite, pin, and launch installed applications from a
-      keyboard-, pointer-, and touch-friendly COSMIC panel menu.
+      Browse, search, favourite, pin and launch installed applications from
+      the COSMIC panel. Grid, list and hybrid layouts, with a choice of menu
+      size and panel icon.
     </p>
   </description>
   <url type="homepage">https://github.com/justinkelly/cosmic-ext-kickoff-launcher</url>

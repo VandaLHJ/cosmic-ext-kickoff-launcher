@@ -23,7 +23,7 @@ kde-legacy-license-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-
 kde2-kicker-license-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE2-Kicker-MIT.txt'
 xfce-license-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Xfce-Panel-GPL-2.0-or-later.txt'
 haiku-license-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Haiku-Icons-MIT.txt'
-system76-approval-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-APPROVAL-PENDING.md'
+system76-trademark-dst := base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-TRADEMARK.md'
 
 # Installation paths for the current user (no root required)
 user-base-dir := absolute_path(env('HOME') / '.local')
@@ -83,11 +83,11 @@ install:
     install -Dm0644 LICENSES/KDE2-Kicker-MIT.txt {{kde2-kicker-license-dst}}
     install -Dm0644 LICENSES/Xfce-Panel-GPL-2.0-or-later.txt {{xfce-license-dst}}
     install -Dm0644 LICENSES/Haiku-Icons-MIT.txt {{haiku-license-dst}}
-    install -Dm0644 LICENSES/System76-COSMIC-APPROVAL-PENDING.md {{system76-approval-dst}}
+    install -Dm0644 LICENSES/System76-COSMIC-TRADEMARK.md {{system76-trademark-dst}}
 
 # Uninstalls installed files
 uninstall:
-    rm {{bin-dst}} {{desktop-dst}} {{appdata-dst}} {{icon-dst}} {{symbolic-icon-dst}} {{license-dst}} {{notices-dst}} {{lgpl-license-dst}} {{kde-breeze-license-dst}} {{kde-oxygen-license-dst}} {{kde-legacy-license-dst}} {{kde2-kicker-license-dst}} {{xfce-license-dst}} {{haiku-license-dst}} {{system76-approval-dst}}
+    rm {{bin-dst}} {{desktop-dst}} {{appdata-dst}} {{icon-dst}} {{symbolic-icon-dst}} {{license-dst}} {{notices-dst}} {{lgpl-license-dst}} {{kde-breeze-license-dst}} {{kde-oxygen-license-dst}} {{kde-legacy-license-dst}} {{kde2-kicker-license-dst}} {{xfce-license-dst}} {{haiku-license-dst}} {{system76-trademark-dst}}
 
 # Installs files for the current user (no root required)
 install-user: build-release
@@ -105,11 +105,11 @@ install-user: build-release
     install -Dm0644 LICENSES/KDE2-Kicker-MIT.txt {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE2-Kicker-MIT.txt' }}
     install -Dm0644 LICENSES/Xfce-Panel-GPL-2.0-or-later.txt {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Xfce-Panel-GPL-2.0-or-later.txt' }}
     install -Dm0644 LICENSES/Haiku-Icons-MIT.txt {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Haiku-Icons-MIT.txt' }}
-    install -Dm0644 LICENSES/System76-COSMIC-APPROVAL-PENDING.md {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-APPROVAL-PENDING.md' }}
+    install -Dm0644 LICENSES/System76-COSMIC-TRADEMARK.md {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-TRADEMARK.md' }}
 
 # Uninstalls user-installed files
 uninstall-user:
-    rm {{ user-base-dir / 'bin' / name }} {{ user-base-dir / 'share' / 'applications' / desktop }} {{ user-base-dir / 'share' / 'appdata' / appdata }} {{ user-base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps' / appid + '.svg' }} {{ user-base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps' / appid + '-symbolic.svg' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSE' }} {{ user-base-dir / 'share' / 'doc' / name / 'THIRD_PARTY_NOTICES.md' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Breeze-Icons-LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Oxygen-Icons-LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Legacy-Icons-LGPL-2.1-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE2-Kicker-MIT.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Xfce-Panel-GPL-2.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Haiku-Icons-MIT.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-APPROVAL-PENDING.md' }}
+    rm {{ user-base-dir / 'bin' / name }} {{ user-base-dir / 'share' / 'applications' / desktop }} {{ user-base-dir / 'share' / 'appdata' / appdata }} {{ user-base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps' / appid + '.svg' }} {{ user-base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps' / appid + '-symbolic.svg' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSE' }} {{ user-base-dir / 'share' / 'doc' / name / 'THIRD_PARTY_NOTICES.md' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Breeze-Icons-LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Oxygen-Icons-LGPL-3.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE-Legacy-Icons-LGPL-2.1-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'KDE2-Kicker-MIT.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Xfce-Panel-GPL-2.0-or-later.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'Haiku-Icons-MIT.txt' }} {{ user-base-dir / 'share' / 'doc' / name / 'LICENSES' / 'System76-COSMIC-TRADEMARK.md' }}
 
 # Vendor dependencies locally
 vendor:

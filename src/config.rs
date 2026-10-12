@@ -249,6 +249,13 @@ impl AppletConfig {
         deduplicate(&mut self.favourites);
         deduplicate(&mut self.recents);
         self.recents.truncate(self.max_recents);
+
+        // The System76 wordmark is no longer bundled. Fall back to the
+        // default launcher icon so a saved selection does not point at a
+        // missing asset.
+        if self.panel_icon == "cosmic-kickoff-system76-logo" {
+            self.panel_icon = Self::default().panel_icon;
+        }
     }
 
     pub fn add_recent(&mut self, app_id: &str) {

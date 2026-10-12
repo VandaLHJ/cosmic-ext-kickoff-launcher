@@ -20,35 +20,32 @@ project artwork licensed under GPL-3.0-only; see `LICENSE`.
 - Copyright: COSMIC App Library contributors
 - Licence: GPL-3.0-only; see `LICENSE`
 
-## COSMIC and System76 brand marks (approval pending)
+## COSMIC logo
 
-- Files: `resources/icons/cosmic-logo.svg`, `cosmic-logo-mono.svg`,
-  `system76-logo.svg`, and `system76-logo-mono.svg`
+- Files: `resources/icons/cosmic-logo.svg` and `cosmic-logo-mono.svg`
 - Source artwork: [`system76/brand`](https://github.com/system76/brand),
-  `COSMIC branding/cosmic logo white + gradient mark.svg` and
-  `System76 branding/system76-logo_secondary.svg`
+  `COSMIC branding/cosmic logo white + gradient mark.svg`
 - Source revision checked: `bed1fd3fd39d3f3371c57f15878195888c617777`
-- Local changes: square icon canvases and separately prepared monochrome
-  variants for panel tinting
+- Local changes: both files use a square icon canvas. The colour file keeps
+  the orange gradient and white wordmark. The monochrome file is the same
+  drawing in grey for the panel’s monochrome icon option.
 - Copyright and trademarks: System76, Inc.
 
-The official brand repository does not include a copyright licence granting
-general redistribution of these brand files. Their restoration to this source
-tree must not be interpreted as an open-source licence grant. **Before a
-release containing these four files is redistributed, obtain and retain
-written approval from System76 covering both copyright redistribution and
-trademark use.** The COSMIC trademark policy directs permission requests to
-`trademark@system76.com`; the COSMIC team can also be reached at
-`cosmic@system76.com`. Record the resulting approval and its scope in
-`LICENSES/System76-COSMIC-APPROVAL-PENDING.md`.
+System76 confirmed this project may use COSMIC™ while it follows the
+[COSMIC trademark policy](https://github.com/pop-os/cosmic-epoch/blob/master/TRADEMARK.md).
+The colour file keeps the official orange gradient and white wordmark. The
+grey file is only the monochrome panel option. The applet is named “for the
+COSMIC™ desktop”; it is not official COSMIC software. See
+`LICENSES/System76-COSMIC-TRADEMARK.md`.
 
-This approval requirement is separate from the GPL-3.0-only licence on the
-COSMIC App Library launcher icon above.
+That confirmation is separate from the GPL-3.0-only licence on the COSMIC App
+Library launcher icon above.
 
 ## Xfce Applications Menu
 
 - Files: `resources/panel-icons/xfce-applications-menu.svg` and the derived
-  `xfce-applications-menu-symbolic.svg`
+  `xfce-applications-menu-symbolic.svg` (a one-colour trace of the mouse,
+  with the eyes cut out so the mark still reads when the panel tints it)
 - Source: [`xfce/xfce4-panel`](https://gitlab.xfce.org/xfce/xfce4-panel),
   `icons/scalable/org.xfce.panel.applicationsmenu.svg`
 - Source revision: `c874435e9e3c5d2bb4649c4a0bec5d163307d65e`
@@ -59,7 +56,8 @@ COSMIC App Library launcher icon above.
 ## Haiku Deskbar
 
 - Files: `resources/panel-icons/haiku-deskbar.svg` and the derived
-  `haiku-deskbar-symbolic.svg`
+  `haiku-deskbar-symbolic.svg` (a simplified desk, folder, and drawers for
+  one-colour panel tinting)
 - SVG conversion source: [`darealshinji/haiku-icons`](https://github.com/darealshinji/haiku-icons),
   `svg/App_Deskbar.svg`, revision
   `ccf434a0cf31aae47cc8aac91934651619c1b9b2`
@@ -73,7 +71,9 @@ leaf or wordmark. Original BeOS logo/artwork is not included.
 
 ## KDE 2 Kicker launcher
 
-- File: `resources/panel-icons/kde2-kicker.png`
+- Files: `resources/panel-icons/kde2-kicker.png`; monochrome mode uses
+  `kde-gear-symbolic.svg`, a simplified K-in-a-gear drawn from this launcher
+  and the Classic mark below
 - Source: KDE's official
   [`kdebase-2.2.2.tar.bz2`](https://download.kde.org/Attic/2.2.2/src/kdebase-2.2.2.tar.bz2),
   `kicker/data/icons/hi48-app-go.png`
@@ -90,8 +90,10 @@ not an image copied from the screenshot.
 
 ## KDE 3 Crystal launcher
 
-- File: `resources/panel-icons/kde3-crystal.svg`, decompressed without artwork
-  changes from `pics/crystalsvg/crsc-app-kmenu.svgz`
+- Files: `resources/panel-icons/kde3-crystal.svg`, decompressed without artwork
+  changes from `pics/crystalsvg/crsc-app-kmenu.svgz`; monochrome mode uses
+  `kde-tile-symbolic.svg`, a rounded tile with the K cut out so the letter
+  stays visible when the icon is tinted one colour
 - Source: KDE's official
   [`kdelibs-3.5.10.tar.bz2`](https://download.kde.org/Attic/3.5.10/src/kdelibs-3.5.10.tar.bz2)
 - Release: KDE 3.5.10
@@ -101,13 +103,13 @@ not an image copied from the screenshot.
 
 ## KDE Classic legacy logo
 
-- File: `resources/icons/kde-classic.svg`; monochrome mode uses the Breeze
-  small-size symbolic launcher already attributed below
+- Files: `resources/icons/kde-classic.svg`; monochrome mode uses
+  `resources/panel-icons/kde-gear-symbolic.svg`
 - Source: KDE's official [clipart archive](https://kde.org/stuff/clipart/),
   `klogo-classic.svg`
-- Local status: restored byte-for-byte from this project's history; it is a
-  visually equivalent Karbon SVG revision rather than a byte-identical copy
-  of the archive's current optimized file
+- Local status: restored byte-for-byte from this project's history. It is a
+  visually equivalent Karbon SVG revision, and it is not a byte-identical copy
+  of the archive's current optimised file
 - Copyright: KDE e.V. and KDE artwork contributors
 - Licence: LGPL-2.1-or-later; see
   `LICENSES/KDE-Legacy-Icons-LGPL-2.1-or-later.txt`
@@ -116,29 +118,25 @@ KDE publishes this logo for archival and historic use and advises against
 using legacy marks to create new KDE-related branding. Here it is clearly
 labelled as a historical launcher choice.
 
-The restored `resources/icons/kde.svg` and `resources/icons/kde-mono.svg` are
-retained as unused compatibility assets and are not selected or embedded by
-the current code. They depict KDE's K-gear mark and fall under KDE's LGPL logo
-copying terms, but the earlier project commit did not record their exact
-upstream revision. Verify and replace them from an authoritative source before
-re-enabling them.
-
 ## KDE Breeze launcher
 
 - Files: `resources/panel-icons/kde-breeze.svg` and
   `kde-breeze-symbolic.svg`
 - Source: [`frameworks/breeze-icons`](https://invent.kde.org/frameworks/breeze-icons),
-  `icons/places/64/start-here-kde.svg` and
-  `icons/places/22/start-here-kde-symbolic.svg`
+  `icons/places/64/start-here-kde.svg`
 - Source revision: `781f2fe1969a3ca2b5037bc72ef9d331dfb8bfb5`
+- Local changes: the monochrome file keeps that icon's chevron and three dots,
+  drawn heavier than the 22px symbolic so the smallest dot still reads on a
+  panel button, and filled with a single colour for tinting
 - Copyright: 2014 Uri Herrera and other Breeze Icons contributors
 - Licence: LGPL-3.0-or-later, including KDE's artwork-library clarification;
   see `LICENSES/KDE-Breeze-Icons-LGPL-3.0-or-later.txt`
 
 ## KDE Oxygen launcher
 
-- File: `resources/icons/kde-oxygen.svg`, decompressed without artwork changes
-  from `scalable/places/start-here-kde.svgz`
+- Files: `resources/icons/kde-oxygen.svg`, decompressed without artwork
+  changes from `scalable/places/start-here-kde.svgz`; monochrome mode uses
+  `resources/panel-icons/kde-tile-symbolic.svg`
 - Source: [`frameworks/oxygen-icons`](https://invent.kde.org/frameworks/oxygen-icons)
 - Source revision: `9894dfad4a5edc3a47962f69266305e66ad677c7`
 - Copyright: 2007 Nuno Pinheiro, David Vignoni, David Miller, Johann Ollivier
@@ -146,9 +144,8 @@ re-enabling them.
 - Licence: LGPL-3.0-or-later, including KDE's artwork-library clarification;
   see `LICENSES/KDE-Oxygen-Icons-LGPL-3.0-or-later.txt`
 
-Oxygen predates symbolic launcher icons. When monochrome mode is enabled, the
-application uses the Breeze small-size symbolic KDE launcher glyph rather than
-flattening Oxygen's blue tile into an unreadable silhouette.
+Oxygen predates symbolic launcher icons. Monochrome mode uses the rounded
+tile with the K cut out, which is how the colour icon reads at panel size.
 
 ## Debian Open Use logo
 
@@ -162,13 +159,13 @@ flattening Oxygen's blue tile into an unreadable silhouette.
 
 ## Trademarks
 
-COSMIC and System76 are trademarks of System76, Inc. KDE and the KDE logo are
-trademarks of KDE e.V. Debian is a registered trademark owned by Software in
-the Public Interest, Inc. Xfce and Haiku names and marks belong to their
-respective owners. These icons identify selectable desktop/distribution
-styles; their inclusion does not imply sponsorship, affiliation, or
-endorsement. See the explicit pending-approval warning for the restored
-COSMIC/System76 brand files above.
+COSMIC is a trademark of System76, Inc. KDE and the KDE logo are trademarks of
+KDE e.V. Debian is a registered trademark owned by Software in the Public
+Interest, Inc. Xfce and Haiku names and marks belong to their respective
+owners. These icons identify selectable desktop/distribution styles; their
+inclusion does not imply sponsorship, affiliation, or endorsement. The COSMIC
+name and colour logo are used under the COSMIC trademark policy; see
+`LICENSES/System76-COSMIC-TRADEMARK.md`.
 
 Relevant guidance is published by
 [System76](https://github.com/pop-os/cosmic-epoch/blob/master/TRADEMARK.md),
@@ -178,16 +175,16 @@ Relevant guidance is published by
 
 ## Artwork intentionally not bundled
 
-Ubuntu, Arch Linux, Fedora, FreeBSD, OpenBSD, and original BeOS marks are not
-bundled. Their software being open source does not by itself license the
-associated artwork.
-At the time of this review, the available official terms either restricted
-logo use or did not provide a sufficiently clear, file-specific redistribution
-licence for this app's commercial and non-commercial downstream packages. See
-the current policies from [Canonical](https://canonical.com/legal/intellectual-property-policy),
+Ubuntu, Arch Linux, Fedora, FreeBSD, OpenBSD and original BeOS marks are not
+bundled. An open-source program does not, on its own, license the logo that
+goes with it.
+As of October 2026, the published terms either limit how the logo may be used
+or do not clearly allow this project to redistribute that particular file,
+including in downstream packages. See the current policies from
+[Canonical](https://canonical.com/legal/intellectual-property-policy),
 [Arch Linux](https://terms.archlinux.org/docs/trademark-policy/),
 [Fedora](https://fedoraproject.org/wiki/Logo),
 [The FreeBSD Foundation](https://freebsdfoundation.org/legal/trademark-usage-terms-and-conditions/),
 and [OpenBSD](https://www.openbsd.org/artwork.html) before reconsidering them.
-BeOS was proprietary; the MIT-licensed Haiku Deskbar application artwork above
-is the open replacement included for that visual lineage.
+BeOS was proprietary. The MIT-licensed Haiku Deskbar icon above is the open
+artwork used for that look.

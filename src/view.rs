@@ -33,7 +33,6 @@ const ICON_OPTIONS: &[(&str, &str)] = &[
     ),
     (panel_icons::COSMIC_APP_LIBRARY, "COSMIC App Library"),
     (panel_icons::COSMIC_LOGO, "COSMIC Logo"),
-    (panel_icons::SYSTEM76_LOGO, "System76"),
     (panel_icons::MOBILE_DOTS, "Mobile Dots"),
     (panel_icons::APP_DRAWER, "App Drawer"),
     (panel_icons::BENTO, "Bento"),
