@@ -27,12 +27,12 @@ use std::sync::{Arc, LazyLock};
 
 /// Panel icon names and display labels.
 const ICON_OPTIONS: &[(&str, &str)] = &[
+    (panel_icons::COSMIC_LOGO, "COSMIC Logo"),
     (
         "com.github.cosmic-kickoff-launcher",
         "Kickoff Launcher",
     ),
     (panel_icons::COSMIC_APP_LIBRARY, "COSMIC App Library"),
-    (panel_icons::COSMIC_LOGO, "COSMIC Logo"),
     (panel_icons::MOBILE_DOTS, "Mobile Dots"),
     (panel_icons::APP_DRAWER, "App Drawer"),
     (panel_icons::BENTO, "Bento"),
@@ -385,7 +385,7 @@ impl Applet {
                     });
 
             let current_icon = if self.config.panel_icon.is_empty() {
-                "com.github.cosmic-kickoff-launcher"
+                panel_icons::COSMIC_LOGO
             } else {
                 self.config.panel_icon.as_str()
             };

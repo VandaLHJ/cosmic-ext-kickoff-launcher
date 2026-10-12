@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+use crate::panel_icons;
 use cosmic::cosmic_config::{self, cosmic_config_derive::CosmicConfigEntry, CosmicConfigEntry};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
@@ -199,7 +200,7 @@ impl Default for AppletConfig {
             size_preset: SizePreset::Portrait,
             custom_width: 0.0,
             custom_height: 0.0,
-            panel_icon: "com.github.cosmic-kickoff-launcher".into(),
+            panel_icon: panel_icons::COSMIC_LOGO.into(),
             panel_icon_symbolic: false,
             max_recents: 10,
             show_favourites: true,
@@ -253,8 +254,8 @@ impl AppletConfig {
         // The System76 wordmark is no longer bundled. Fall back to the
         // default launcher icon so a saved selection does not point at a
         // missing asset.
-        if self.panel_icon == "cosmic-kickoff-system76-logo" {
-            self.panel_icon = Self::default().panel_icon;
+        if self.panel_icon.is_empty() || self.panel_icon == "cosmic-kickoff-system76-logo" {
+            self.panel_icon = panel_icons::COSMIC_LOGO.into();
         }
     }
 

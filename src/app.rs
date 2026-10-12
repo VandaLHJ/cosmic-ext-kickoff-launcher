@@ -882,7 +882,7 @@ impl Application for Applet {
 
 fn panel_icon_handle(config: &AppletConfig) -> cosmic::widget::icon::Handle {
     let name = if config.panel_icon.is_empty() {
-        APP_ID
+        panel_icons::COSMIC_LOGO
     } else {
         config.panel_icon.as_str()
     };
