@@ -119,23 +119,40 @@ just check         # clippy with pedantic warnings
 
 ## Flatpak
 
-Panel applets are published from the [COSMIC Flatpak repository](https://github.com/pop-os/cosmic-flatpak). The manifest is `flatpak/com.github.cosmic-kickoff-launcher.json`. It uses the Freedesktop 25.08 runtime from Flathub and `com.system76.Cosmic.BaseApp` from the COSMIC remote.
+Panel applets are published from the [COSMIC Flatpak repository](https://github.com/pop-os/cosmic-flatpak). That remote only contains published applets. The build dependencies are on Flathub: the Freedesktop 25.08 runtime and SDK, the Rust SDK extension, and `com.system76.Cosmic.BaseApp`. The manifest is `flatpak/com.github.cosmic-kickoff-launcher.json`.
 
-Install `flatpak` and `flatpak-builder`, then add both remotes for your user. A system Flathub remote is not enough for a `--user` build, and Fedora's filtered Flathub remote does not carry the SDK.
+Install `flatpak` and `flatpak-builder`. On Fedora that is `sudo dnf install flatpak-builder`. Install the runtimes from the system Flathub remote. A `--user` install looks for a user remote named `flathub` and will not see the system one.
+
+```
+flatpak install -y flathub \
+  com.system76.Cosmic.BaseApp//stable \
+  org.freedesktop.Platform//25.08 \
+  org.freedesktop.Sdk//25.08 \
+  org.freedesktop.Sdk.Extension.rust-stable//25.08
+```
+
+If Kickoff Launcher was installed with `just install-user`, remove that copy first. Both installs use the same desktop id, and the panel keeps launching the one in `~/.local`.
+
+```
+just uninstall-user
+```
+
+From the repository root, build and install the applet for your user. `flatpak-builder --user` installs its dependencies into the user installation, so Flathub has to exist there too. The system remote is not visible to that command. The manifest gives the build sandbox network access because Cargo downloads `libcosmic` and the other crates from GitHub. `build-dir` is only the build tree.
 
 ```
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak remote-add --if-not-exists --user cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
-```
-
-From the repository root, build and install it for your user. `flatpak-builder` pulls the runtime, the Rust SDK extension and the COSMIC base app. `build-dir` is only the build tree.
-
-```
 flatpak-builder --install --user --force-clean \
   --install-deps-from=flathub \
-  --install-deps-from=cosmic \
   build-dir flatpak/com.github.cosmic-kickoff-launcher.json
 ```
+
+Flatpak 1.18 removes `X-CosmicApplet` and the other COSMIC keys from the exported desktop file, so the panel's applet list will not show the launcher until those keys are written back. Edit the file under the Flatpak exports directory. A copy in `~/.local/share/applications` is launched as a normal window instead of a panel applet.
+
+```
+./flatpak/restore-applet-keys.sh
+```
+
+A newer Flatpak keeps `X-CosmicApplet` and `X-CosmicHoverPopup` (added upstream on 9 October 2026). It still drops `X-HostWaylandDisplay` and `X-OverflowPriority`, so run the restore script after each reinstall.
 
 Run it as a normal window:
 
@@ -149,25 +166,26 @@ To put it on the panel, restart the panel and add Kickoff Launcher from the pane
 pkill -x cosmic-panel
 ```
 
+`flatpak ps` should list `com.github.cosmic-kickoff-launcher` running `/app/launch-applet.sh`.
+
 Remove it with:
 
 ```
 flatpak uninstall --user com.github.cosmic-kickoff-launcher
 ```
 
-To make a single-file bundle for another machine that already has those remotes:
+To make a single-file bundle for another machine that already has Flathub:
 
 ```
 flatpak-builder --repo=repo --force-clean \
   --install-deps-from=flathub \
-  --install-deps-from=cosmic \
   build-dir flatpak/com.github.cosmic-kickoff-launcher.json
 
 flatpak build-bundle repo cosmic-ext-kickoff-launcher.flatpak com.github.cosmic-kickoff-launcher
 flatpak install --user cosmic-ext-kickoff-launcher.flatpak
 ```
 
-Inside the sandbox the applet starts from `flatpak/launch-applet.sh`. That script reads the host `PATH` and `XDG_DATA_DIRS` with `flatpak-spawn --host`, the same way Classic Menu does, so the menu can see applications installed on the host. Launching an app, and the power confirmation dialogue (`cosmic-osd`), also go through `flatpak-spawn --host`.
+Inside the sandbox the applet starts from `flatpak/launch-applet.sh`. That script reads the host `PATH` and `XDG_DATA_DIRS` with `flatpak-spawn --host`, so the menu can see applications installed on the host. Launching an app, D-Bus activation, and the power confirmation dialogue (`cosmic-osd`) also go through `flatpak-spawn --host`. The sandbox itself can read host application and icon directories, write COSMIC settings, and call logind. It does not get the whole session bus, the whole system bus, or read access to the rest of the home directory.
 
 ## Licence
 

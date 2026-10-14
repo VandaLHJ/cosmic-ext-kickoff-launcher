@@ -123,6 +123,11 @@ fn spawn_application(app: Arc<ApplicationEntry>, token: Option<String>) -> Task<
 }
 
 async fn activate_dbus_application(app_id: &str, token: Option<&str>) -> zbus::Result<()> {
+    if in_flatpak() {
+        // The sandbox does not get the session bus. Activate on the host bus
+        // through flatpak-spawn, which the manifest already allows.
+        return activate_dbus_on_host(app_id, token).await;
+    }
     let connection = zbus::Connection::session().await?;
     let object_path = format!("/{}", app_id.replace('.', "/").replace('-', "_"));
     let proxy = zbus::Proxy::new(
@@ -138,6 +143,41 @@ async fn activate_dbus_application(app_id: &str, token: Option<&str>) -> zbus::R
         platform_data.insert("desktop-startup-id", zbus::zvariant::Value::from(token));
     }
     proxy.call::<_, _, ()>("Activate", &platform_data).await
+}
+
+async fn activate_dbus_on_host(app_id: &str, token: Option<&str>) -> zbus::Result<()> {
+    let object_path = format!("/{}", app_id.replace('.', "/").replace('-', "_"));
+    let mut command = tokio::process::Command::new("flatpak-spawn");
+    command
+        .arg("--host")
+        .arg("busctl")
+        .arg("--user")
+        .arg("call")
+        .arg(app_id)
+        .arg(&object_path)
+        .arg("org.freedesktop.Application")
+        .arg("Activate")
+        .arg("a{sv}");
+    if let Some(token) = token {
+        command.args([
+            "2",
+            "activation-token",
+            "s",
+            token,
+            "desktop-startup-id",
+            "s",
+            token,
+        ]);
+    } else {
+        command.arg("0");
+    }
+    match command.status().await {
+        Ok(status) if status.success() => Ok(()),
+        Ok(status) => Err(zbus::Error::Failure(format!(
+            "host busctl activation exited with {status}"
+        ))),
+        Err(err) => Err(zbus::Error::Failure(err.to_string())),
+    }
 }
 
 fn in_flatpak() -> bool {
