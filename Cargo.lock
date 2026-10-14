@@ -952,7 +952,7 @@ dependencies = [
 
 [[package]]
 name = "cosmic-ext-kickoff-launcher"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "freedesktop-desktop-entry",
  "i18n-embed",

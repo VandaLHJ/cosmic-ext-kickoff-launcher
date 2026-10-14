@@ -36,7 +36,38 @@
   <keywords>
     <keyword>COSMIC</keyword>
   </keywords>
+  <screenshots>
+    <screenshot type="default">
+      <caption>All applications in a grid</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/all-apps-grid.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Applications in a list</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/list-view.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Search by name, description, and keywords</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/search-results.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Favourite applications</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/favourites.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Light mode</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/light-mode.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Appearance settings</caption>
+      <image>https://raw.githubusercontent.com/justinkelly/cosmic-ext-kickoff-launcher/main/screenshots/appearance-settings.png</image>
+    </screenshot>
+  </screenshots>
   <releases>
+    <release version="0.1.2" date="2026-10-14">
+      <description>
+        <p>Show Flatpak applications whose desktop files are symlinks into the app install tree.</p>
+      </description>
+    </release>
     <release version="0.1.1" date="2026-10-14">
       <description>
         <p>Use a GitHub application id and a tighter Flatpak sandbox.</p>
