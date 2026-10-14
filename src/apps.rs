@@ -110,8 +110,19 @@ fn load_apps_from_dirs_for_desktops(
         .map(|paths| std::env::split_paths(&paths).collect())
         .unwrap_or_default();
 
-    for desktop_entry in fde::Iter::new(data_dirs.into_iter()).entries(Some(languages)) {
+    for path in fde::Iter::new(data_dirs.into_iter()) {
         total_files += 1;
+        let desktop_entry = match fde::DesktopEntry::from_path(&path, Some(languages)) {
+            Ok(entry) => entry,
+            Err(fde::DecodeError::Io(err)) => {
+                // Flatpak export entries are symlinks into the app install
+                // tree. A sandbox that can see the export directory but not
+                // that tree reports the file as missing.
+                tracing::warn!("Could not read desktop file {}: {err}", path.display());
+                continue;
+            }
+            Err(_) => continue,
+        };
         // Hidden entries still claim their ID and mask lower-precedence files.
         let id = format!("{}.desktop", desktop_entry.id());
         if !seen.insert(id.clone()) {

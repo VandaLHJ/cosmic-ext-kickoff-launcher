@@ -187,6 +187,8 @@ flatpak install --user cosmic-ext-kickoff-launcher.flatpak
 
 Inside the sandbox the applet starts from `flatpak/launch-applet.sh`. That script reads the host `PATH` and `XDG_DATA_DIRS` with `flatpak-spawn --host`, so the menu can see applications installed on the host. Launching an app, D-Bus activation, and the power confirmation dialogue (`cosmic-osd`) also go through `flatpak-spawn --host`. The sandbox itself can read host application and icon directories, write COSMIC settings, and call logind. It does not get the whole session bus, the whole system bus, or read access to the rest of the home directory.
 
+Flatpak export `.desktop` files and icons are symlinks into `/var/lib/flatpak/app` and `~/.local/share/flatpak/app`. Those directories are readable as well; the export directory alone is not enough, because opening the symlink fails when the target is outside the sandbox.
+
 ## Licence
 
 Licensed under the [GPL-3.0-only](LICENSE).
