@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.github.cosmic-kickoff-launcher</id>
+  <id>com.github.justinkelly.cosmic-ext-kickoff-launcher</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <name>Kickoff Launcher for the COSMIC™ desktop</name>
@@ -13,10 +13,10 @@
     </p>
   </description>
   <url type="homepage">https://github.com/justinkelly/cosmic-ext-kickoff-launcher</url>
-  <developer id="com.github.cosmic-kickoff-launcher">
+  <developer id="com.github.justinkelly">
     <name>Kickoff Launcher contributors</name>
   </developer>
-  <launchable type="desktop-id">com.github.cosmic-kickoff-launcher.desktop</launchable>
+  <launchable type="desktop-id">com.github.justinkelly.cosmic-ext-kickoff-launcher.desktop</launchable>
   <provides>
     <id>com.system76.CosmicApplet</id>
     <binary>cosmic-ext-kickoff-launcher</binary>
@@ -37,6 +37,11 @@
     <keyword>COSMIC</keyword>
   </keywords>
   <releases>
+    <release version="0.1.1" date="2026-10-14">
+      <description>
+        <p>Use a GitHub application id and a tighter Flatpak sandbox.</p>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-08-30">
       <description>
         <p>Initial development release.</p>

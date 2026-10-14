@@ -256,6 +256,8 @@ impl AppletConfig {
         // missing asset.
         if self.panel_icon.is_empty() || self.panel_icon == "cosmic-kickoff-system76-logo" {
             self.panel_icon = panel_icons::COSMIC_LOGO.into();
+        } else if self.panel_icon == "com.github.cosmic-kickoff-launcher" {
+            self.panel_icon = "com.github.justinkelly.cosmic-ext-kickoff-launcher".into();
         }
     }
 

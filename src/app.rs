@@ -23,12 +23,15 @@ use apps::{ApplicationCategory, ApplicationEntry};
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, LazyLock};
 
-pub(crate) const APP_ID: &str = "com.github.cosmic-kickoff-launcher";
+pub(crate) const APP_ID: &str = "com.github.justinkelly.cosmic-ext-kickoff-launcher";
 
 pub(crate) struct Flags {
     pub window: bool,
 }
-const LEGACY_APP_ID: &str = "com.github.cosmic-kde-launcher";
+const PREVIOUS_APP_IDS: &[&str] = &[
+    "com.github.cosmic-kickoff-launcher",
+    "com.github.cosmic-kde-launcher",
+];
 pub(crate) const COSMIC_FILES_APP_ID: &str = "com.system76.CosmicFiles.desktop";
 pub(crate) const COSMIC_STORE_APP_ID: &str = "com.system76.CosmicStore.desktop";
 pub(crate) const COSMIC_SETTINGS_APP_ID: &str = "com.system76.CosmicSettings.desktop";
@@ -624,12 +627,19 @@ impl Application for Applet {
                         Err((_errors, config)) => config,
                     };
                     if config == AppletConfig::default() {
-                        if let Ok(legacy_context) =
-                            cosmic_config::Config::new(LEGACY_APP_ID, AppletConfig::VERSION)
-                        {
-                            if let Ok(legacy) = AppletConfig::get_entry(&legacy_context) {
+                        for legacy_id in PREVIOUS_APP_IDS {
+                            let Ok(legacy_context) =
+                                cosmic_config::Config::new(legacy_id, AppletConfig::VERSION)
+                            else {
+                                continue;
+                            };
+                            let Ok(legacy) = AppletConfig::get_entry(&legacy_context) else {
+                                continue;
+                            };
+                            if legacy != AppletConfig::default() {
                                 config = legacy;
                                 let _ = config.write_entry(&context);
+                                break;
                             }
                         }
                     }

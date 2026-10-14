@@ -5,7 +5,7 @@
 # on that exported file. Do not copy it to ~/.local/share/applications.
 set -eu
 
-app_id=com.github.cosmic-kickoff-launcher
+app_id=com.github.justinkelly.cosmic-ext-kickoff-launcher
 data_home=${XDG_DATA_HOME:-"$HOME/.local/share"}
 export_link="$data_home/flatpak/exports/share/applications/$app_id.desktop"
 

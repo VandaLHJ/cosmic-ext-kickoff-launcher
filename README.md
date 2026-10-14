@@ -119,7 +119,7 @@ just check         # clippy with pedantic warnings
 
 ## Flatpak
 
-Panel applets are published from the [COSMIC Flatpak repository](https://github.com/pop-os/cosmic-flatpak). That remote only contains published applets. The build dependencies are on Flathub: the Freedesktop 25.08 runtime and SDK, the Rust SDK extension, and `com.system76.Cosmic.BaseApp`. The manifest is `flatpak/com.github.cosmic-kickoff-launcher.json`.
+Panel applets are published from the [COSMIC Flatpak repository](https://github.com/pop-os/cosmic-flatpak). That remote only contains published applets. The build dependencies are on Flathub: the Freedesktop 25.08 runtime and SDK, the Rust SDK extension, and `com.system76.Cosmic.BaseApp`. The manifest is `flatpak/com.github.justinkelly.cosmic-ext-kickoff-launcher.json`.
 
 Install `flatpak` and `flatpak-builder`. On Fedora that is `sudo dnf install flatpak-builder`. Install the runtimes from the system Flathub remote. A `--user` install looks for a user remote named `flathub` and will not see the system one.
 
@@ -143,7 +143,7 @@ From the repository root, build and install the applet for your user. `flatpak-b
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak-builder --install --user --force-clean \
   --install-deps-from=flathub \
-  build-dir flatpak/com.github.cosmic-kickoff-launcher.json
+  build-dir flatpak/com.github.justinkelly.cosmic-ext-kickoff-launcher.json
 ```
 
 Flatpak 1.18 removes `X-CosmicApplet` and the other COSMIC keys from the exported desktop file, so the panel's applet list will not show the launcher until those keys are written back. Edit the file under the Flatpak exports directory. A copy in `~/.local/share/applications` is launched as a normal window instead of a panel applet.
@@ -157,7 +157,7 @@ A newer Flatpak keeps `X-CosmicApplet` and `X-CosmicHoverPopup` (added upstream 
 Run it as a normal window:
 
 ```
-flatpak run com.github.cosmic-kickoff-launcher --window
+flatpak run com.github.justinkelly.cosmic-ext-kickoff-launcher --window
 ```
 
 To put it on the panel, restart the panel and add Kickoff Launcher from the panel's applet list:
@@ -166,12 +166,12 @@ To put it on the panel, restart the panel and add Kickoff Launcher from the pane
 pkill -x cosmic-panel
 ```
 
-`flatpak ps` should list `com.github.cosmic-kickoff-launcher` running `/app/launch-applet.sh`.
+`flatpak ps` should list `com.github.justinkelly.cosmic-ext-kickoff-launcher` running `/app/launch-applet.sh`.
 
 Remove it with:
 
 ```
-flatpak uninstall --user com.github.cosmic-kickoff-launcher
+flatpak uninstall --user com.github.justinkelly.cosmic-ext-kickoff-launcher
 ```
 
 To make a single-file bundle for another machine that already has Flathub:
@@ -179,9 +179,9 @@ To make a single-file bundle for another machine that already has Flathub:
 ```
 flatpak-builder --repo=repo --force-clean \
   --install-deps-from=flathub \
-  build-dir flatpak/com.github.cosmic-kickoff-launcher.json
+  build-dir flatpak/com.github.justinkelly.cosmic-ext-kickoff-launcher.json
 
-flatpak build-bundle repo cosmic-ext-kickoff-launcher.flatpak com.github.cosmic-kickoff-launcher
+flatpak build-bundle repo cosmic-ext-kickoff-launcher.flatpak com.github.justinkelly.cosmic-ext-kickoff-launcher
 flatpak install --user cosmic-ext-kickoff-launcher.flatpak
 ```
 

@@ -1,5 +1,5 @@
 {
-  "id": "com.github.cosmic-kickoff-launcher",
+  "id": "com.github.justinkelly.cosmic-ext-kickoff-launcher",
   "runtime": "org.freedesktop.Platform",
   "runtime-version": "25.08",
   "base": "com.system76.Cosmic.BaseApp",
@@ -37,7 +37,7 @@
         "just build-release --verbose",
         "just prefix=/app install",
         "install -Dm0755 ./flatpak/launch-applet.sh /app/launch-applet.sh",
-        "sed -i 's|^Exec=.*|Exec=/app/launch-applet.sh|' /app/share/applications/com.github.cosmic-kickoff-launcher.desktop"
+        "sed -i 's|^Exec=.*|Exec=/app/launch-applet.sh|' /app/share/applications/com.github.justinkelly.cosmic-ext-kickoff-launcher.desktop"
       ],
       "sources": [
         {

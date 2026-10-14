@@ -3,8 +3,8 @@
 //! Menu views and widgets.
 
 use crate::app::{
-    Applet, Message, APP_SCROLL_ID, CORNER_BADGE_ICON_SIZE, GRID_ICON_SIZE, LIST_ICON_SIZE,
-    SEARCH_ID, SETTINGS_PANEL_WIDTH, SIDEBAR_WIDTH,
+    Applet, Message, APP_ID, APP_SCROLL_ID, CORNER_BADGE_ICON_SIZE, GRID_ICON_SIZE,
+    LIST_ICON_SIZE, SEARCH_ID, SETTINGS_PANEL_WIDTH, SIDEBAR_WIDTH,
 };
 use crate::config::{LayoutMode, SizePreset};
 use crate::power::PowerAction;
@@ -29,7 +29,7 @@ use std::sync::{Arc, LazyLock};
 const ICON_OPTIONS: &[(&str, &str)] = &[
     (panel_icons::COSMIC_LOGO, "COSMIC Logo"),
     (
-        "com.github.cosmic-kickoff-launcher",
+        APP_ID,
         "Kickoff Launcher",
     ),
     (panel_icons::COSMIC_APP_LIBRARY, "COSMIC App Library"),

@@ -2,7 +2,7 @@
 Name=Kickoff Launcher for the COSMIC™ desktop
 Comment=A KDE-style application menu for the COSMIC™ desktop
 Type=Application
-Icon=com.github.cosmic-kickoff-launcher
+Icon=com.github.justinkelly.cosmic-ext-kickoff-launcher
 Exec=cosmic-ext-kickoff-launcher
 Terminal=false
 StartupNotify=true

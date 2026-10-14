@@ -1,5 +1,5 @@
 name := 'cosmic-ext-kickoff-launcher'
-appid := 'com.github.cosmic-kickoff-launcher'
+appid := 'com.github.justinkelly.cosmic-ext-kickoff-launcher'
 rootdir := ''
 prefix := '/usr'
 
