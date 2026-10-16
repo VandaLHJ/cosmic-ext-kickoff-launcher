@@ -13,9 +13,10 @@
     </p>
   </description>
   <url type="homepage">https://github.com/justinkelly/cosmic-ext-kickoff-launcher</url>
-  <developer id="com.github.justinkelly">
-    <name>Kickoff Launcher contributors</name>
-  </developer>
+<developer_name>Justin Kelly</developer_name>
+<developer id="com.github.justinkelly">
+  <name>Justin Kelly</name>
+</developer>
   <launchable type="desktop-id">com.github.justinkelly.cosmic-ext-kickoff-launcher.desktop</launchable>
   <provides>
     <id>com.system76.CosmicApplet</id>
@@ -63,6 +64,11 @@
     </screenshot>
   </screenshots>
   <releases>
+      <release version="0.1.3" date="2026-10-16">
+      <description>
+        <p>Update Flatpak store details.</p>
+      </description>
+    </release>
     <release version="0.1.2" date="2026-10-14">
       <description>
         <p>Show Flatpak applications whose desktop files are symlinks into the app install tree.</p>
