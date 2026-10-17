@@ -271,6 +271,27 @@ fn expand_exec_fields(
     Some(result.trim().to_string())
 }
 
+pub(crate) fn open_url(url: String) -> Task<Message> {
+    Task::future(async move {
+        let url_for_log = url.clone();
+        let spawned = tokio::task::spawn_blocking(move || {
+            host_command("xdg-open")
+                .arg(url)
+                .stdin(std::process::Stdio::null())
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null())
+                .spawn()
+        })
+        .await;
+        match spawned {
+            Ok(Ok(_)) => {}
+            Ok(Err(err)) => tracing::warn!("Failed to open {url_for_log}: {err}"),
+            Err(err) => tracing::warn!("Failed to open {url_for_log}: {err}"),
+        }
+        cosmic::action::app(Message::LaunchFinished)
+    })
+}
+
 pub(crate) fn spawn_command(command: Command) -> Task<Message> {
     Task::future(async move {
         if cosmic::process::spawn(command).await.is_none() {

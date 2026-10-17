@@ -13,6 +13,10 @@
     </p>
   </description>
   <url type="homepage">https://github.com/justinkelly/cosmic-ext-kickoff-launcher</url>
+  <url type="bugtracker">https://github.com/justinkelly/cosmic-ext-kickoff-launcher/issues</url>
+  <url type="contact">https://github.com/justinkelly/</url>
+  <url type="help">https://github.com/justinkelly/cosmic-ext-kickoff-launcher/blob/main/docs/help.md</url>
+  <url type="faq">https://github.com/justinkelly/cosmic-ext-kickoff-launcher/blob/main/docs/faq.md</url>
 <developer_name>Justin Kelly</developer_name>
 <developer id="com.github.justinkelly">
   <name>Justin Kelly</name>

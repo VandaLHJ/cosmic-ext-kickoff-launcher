@@ -27,6 +27,16 @@ cat-settings = Settings
 cat-system = System
 cat-other = Other
 
+# About
+about = About
+links = Links
+license = License
+link-repository = Repository
+link-support = Support
+link-contact = Contact
+link-help = Help
+link-faq = FAQ
+
 # Settings panel
 settings-title = Settings
 close = Close

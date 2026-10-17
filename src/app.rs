@@ -70,6 +70,7 @@ pub(crate) struct Applet {
     pub(crate) nav_model: segmented_button::SingleSelectModel,
     pub(crate) sidebar_collapsed: bool,
     pub(crate) show_settings: bool,
+    pub(crate) show_about: bool,
     pub(crate) hovered_app_index: Option<usize>,
     pub(crate) hovered_pinned_id: Option<String>,
     pub(crate) pinned_apps: Vec<String>,
@@ -104,6 +105,9 @@ pub(crate) enum Message {
     LayoutMode(LayoutMode),
     ToggleSidebar,
     ToggleSettings,
+    ToggleAbout,
+    CloseAbout,
+    OpenUrl(String),
     SetSizePreset(SizePreset),
     SetCustomWidth(String),
     SetCustomHeight(String),
@@ -242,6 +246,10 @@ fn message_update(applet: &mut Applet, message: Message) -> Task<Message> {
             Task::none()
         }
         Message::ClosePopup => {
+            if applet.show_about {
+                applet.show_about = false;
+                return Task::none();
+            }
             if let Some(popup) = applet.popup.take() {
                 return Task::done(cosmic::Action::App(Message::Surface(destroy_popup(
                     popup,
@@ -378,8 +386,28 @@ fn message_update(applet: &mut Applet, message: Message) -> Task<Message> {
             applet.reset_app_scroll()
         }
         Message::ToggleSettings => {
+            applet.show_about = false;
             applet.show_settings = !applet.show_settings;
             Task::none()
+        }
+        Message::ToggleAbout => {
+            applet.show_settings = false;
+            applet.show_about = !applet.show_about;
+            Task::none()
+        }
+        Message::CloseAbout => {
+            applet.show_about = false;
+            Task::none()
+        }
+        Message::OpenUrl(url) => {
+            let open = launch::open_url(url);
+            if let Some(popup) = applet.popup.take() {
+                return Task::batch([
+                    open,
+                    Task::done(cosmic::Action::App(Message::Surface(destroy_popup(popup)))),
+                ]);
+            }
+            open
         }
         Message::SetSizePreset(preset) => {
             if preset == SizePreset::Custom {
@@ -693,6 +721,7 @@ impl Application for Applet {
             nav_model: segmented_button::SingleSelectModel::default(),
             sidebar_collapsed: false,
             show_settings: false,
+            show_about: false,
             hovered_app_index: None,
             hovered_pinned_id: None,
             pinned_apps: pinned_apps.clone(),
@@ -873,6 +902,19 @@ impl Application for Applet {
         if !self.is_window_mode {
             return Vec::new();
         }
+        let about_btn: Element<'_, Message> = cosmic::widget::button::custom(
+            cosmic::widget::icon::from_name("help-about-symbolic")
+                .symbolic(true)
+                .size(18)
+                .icon(),
+        )
+        .on_press(Message::ToggleAbout)
+        .class(if self.show_about {
+            cosmic::theme::Button::Suggested
+        } else {
+            cosmic::theme::Button::HeaderBar
+        })
+        .into();
         let config_btn: Element<'_, Message> = cosmic::widget::button::custom(
             cosmic::widget::icon::from_name("emblem-system-symbolic")
                 .symbolic(true)
@@ -886,7 +928,7 @@ impl Application for Applet {
             cosmic::theme::Button::HeaderBar
         })
         .into();
-        vec![config_btn]
+        vec![about_btn, config_btn]
     }
 }
 

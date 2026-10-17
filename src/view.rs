@@ -173,6 +173,107 @@ pub(crate) fn navigation_columns(applet: &Applet) -> usize {
     }
 }
 
+fn about_link<'a>(label: String, url: &'static str) -> cosmic::widget::list::ListButton<'a, Message> {
+    cosmic::widget::list::button(
+        row![
+            cosmic::widget::text::body(label).width(Length::Fill),
+            icon::from_name("link-symbolic").size(16).icon(),
+        ]
+        .align_y(Alignment::Center),
+    )
+    .on_press(Message::OpenUrl(url.to_string()))
+}
+
+fn about_content<'a>() -> Element<'a, Message> {
+    let space_m = theme::active().cosmic().spacing.space_m;
+    let header = column![
+        cosmic::widget::icon::from_svg_bytes(include_bytes!("../resources/icon.svg"))
+            .icon()
+            .width(Length::Fixed(128.))
+            .height(Length::Fixed(128.)),
+        cosmic::widget::text::title3(fl!("app-title")),
+        cosmic::widget::text::body("Justin Kelly"),
+        cosmic::widget::text::body(env!("CARGO_PKG_VERSION")),
+    ]
+    .spacing(space_m)
+    .align_x(Alignment::Center)
+    .width(Length::Fill);
+
+    let links = settings::section().title(fl!("links")).extend([
+        about_link(
+            fl!("link-repository"),
+            "https://github.com/justinkelly/cosmic-ext-kickoff-launcher",
+        ),
+        about_link(
+            fl!("link-support"),
+            "https://github.com/justinkelly/cosmic-ext-kickoff-launcher/issues",
+        ),
+        about_link(fl!("link-contact"), "https://github.com/justinkelly/"),
+        about_link(
+            fl!("link-help"),
+            "https://github.com/justinkelly/cosmic-ext-kickoff-launcher/blob/main/docs/help.md",
+        ),
+        about_link(
+            fl!("link-faq"),
+            "https://github.com/justinkelly/cosmic-ext-kickoff-launcher/blob/main/docs/faq.md",
+        ),
+    ]);
+    let license = settings::section().title(fl!("license")).add(about_link(
+        "GPL-3.0-only".to_string(),
+        "https://www.gnu.org/licenses/gpl-3.0.html",
+    ));
+
+    column![
+        header,
+        links,
+        license,
+        cosmic::widget::text::body(fl!("app-comment")),
+    ]
+    .spacing(space_m)
+    .width(Length::Fill)
+    .into()
+}
+
+fn side_panel<'a>(
+    title: String,
+    on_close: Message,
+    content: impl Into<Element<'a, Message>>,
+    space_s: u16,
+    space_m: u16,
+) -> Element<'a, Message> {
+    let header = row![
+        cosmic::widget::text::heading(title),
+        Space::new().width(Length::Fill),
+        button::text(fl!("close"))
+            .trailing_icon(icon::from_name("go-next-symbolic"))
+            .on_press(on_close)
+    ]
+    .align_y(Alignment::Center)
+    .width(Length::Fill);
+
+    // Clicks on plain text, including the version, must not fall through to
+    // the application grid behind this panel.
+    mouse_area(
+        container(
+            column![
+                header,
+                scrollable(content)
+                    .height(Length::Fill)
+                    .width(Length::Fill),
+            ]
+            .spacing(space_m)
+            .width(Length::Fill)
+            .height(Length::Fill),
+        )
+        .width(Length::Fixed(SETTINGS_PANEL_WIDTH))
+        .height(Length::Fill)
+        .padding([space_s, space_s])
+        .class(theme::Container::Primary),
+    )
+    .on_press(Message::ClearAppHover)
+    .into()
+}
+
 impl Applet {
     pub(crate) fn build_menu_view(&self, is_popup: bool) -> Element<'_, Message> {
         let cosmic_theme = theme::active();
@@ -231,6 +332,20 @@ impl Applet {
             .class(theme::Button::AppletMenu)
             .into();
 
+            let about_btn: Element<'_, Message> = button::custom(
+                icon::from_name("help-about-symbolic")
+                    .symbolic(true)
+                    .size(18)
+                    .icon(),
+            )
+            .on_press(Message::ToggleAbout)
+            .class(if self.show_about {
+                theme::Button::Suggested
+            } else {
+                theme::Button::AppletMenu
+            })
+            .into();
+
             let config_btn: Element<'_, Message> = button::custom(
                 icon::from_name("emblem-system-symbolic")
                     .symbolic(true)
@@ -251,6 +366,7 @@ impl Applet {
                     search_toggle_btn,
                     window_btn,
                     Space::new().width(Length::Fill),
+                    about_btn,
                     config_btn,
                 ]
                 .align_y(Alignment::Center)
@@ -318,7 +434,7 @@ impl Applet {
         .on_exit(Message::ClearAppHover)
         .into();
 
-        let settings_panel: Option<Element<'_, Message>> = if self.show_settings {
+        let side_panel_content: Option<Element<'_, Message>> = if self.show_settings {
             let layout_radios: Element<'_, Message> = {
                 let selected = self.config.layout_mode;
                 let choice = |mode: LayoutMode, label: String| {
@@ -491,34 +607,21 @@ impl Applet {
                     .into(),
             ]);
 
-            let settings_header = row![
-                cosmic::widget::text::heading(fl!("settings-title")),
-                Space::new().width(Length::Fill),
-                button::text(fl!("close"))
-                    .trailing_icon(icon::from_name("go-next-symbolic"))
-                    .on_press(Message::ToggleSettings)
-            ]
-            .align_y(Alignment::Center)
-            .width(Length::Fill);
-
-            Some(
-                container(
-                    column![
-                        settings_header,
-                        scrollable(content)
-                            .height(Length::Fill)
-                            .width(Length::Fill),
-                    ]
-                    .spacing(space_m)
-                    .width(Length::Fill)
-                    .height(Length::Fill),
-                )
-                    .width(Length::Fixed(SETTINGS_PANEL_WIDTH))
-                    .height(Length::Fill)
-                    .padding([space_s, space_s])
-                    .class(theme::Container::Primary)
-                    .into(),
-            )
+            Some(side_panel(
+                fl!("settings-title"),
+                Message::ToggleSettings,
+                content,
+                space_s,
+                space_m,
+            ))
+        } else if self.show_about {
+            Some(side_panel(
+                fl!("about"),
+                Message::CloseAbout,
+                about_content(),
+                space_s,
+                space_m,
+            ))
         } else {
             None
         };
@@ -609,7 +712,7 @@ impl Applet {
         }
         dual_pane = dual_pane.push(app_area);
 
-        let dual_pane: Element<'_, Message> = if let Some(settings) = settings_panel {
+        let dual_pane: Element<'_, Message> = if let Some(settings) = side_panel_content {
             stack![
                 dual_pane,
                 container(settings)
