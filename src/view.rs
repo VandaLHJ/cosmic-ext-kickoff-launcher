@@ -192,8 +192,16 @@ fn about_content<'a>() -> Element<'a, Message> {
             .width(Length::Fixed(128.))
             .height(Length::Fixed(128.)),
         cosmic::widget::text::title3(fl!("app-title")),
-        cosmic::widget::text::body("Justin Kelly"),
-        cosmic::widget::text::body(env!("CARGO_PKG_VERSION")),
+        button::text("Justin Kelly").on_press(Message::OpenUrl(
+            "https://github.com/justinkelly/".to_string(),
+        )),
+        button::standard(env!("CARGO_PKG_VERSION")).on_press(Message::OpenUrl(
+            concat!(
+                "https://github.com/justinkelly/cosmic-ext-kickoff-launcher/releases/tag/",
+                env!("CARGO_PKG_VERSION")
+            )
+            .to_string(),
+        )),
     ]
     .spacing(space_m)
     .align_x(Alignment::Center)
@@ -251,8 +259,7 @@ fn side_panel<'a>(
     .align_y(Alignment::Center)
     .width(Length::Fill);
 
-    // Clicks on plain text, including the version, must not fall through to
-    // the application grid behind this panel.
+    // Clicks on plain text must not fall through to the application grid.
     mouse_area(
         container(
             column![
